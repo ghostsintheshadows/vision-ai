@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Text Detection — Vision AI</title>
+<link rel="icon" href="/static/images/favicon.ico"/>
+<link rel="stylesheet" href="/static/detection.css"/>
+<style>
+  .dp-nav-badge { background: rgba(59,130,246,.15); color: #3b82f6; }
+
+  .ocr-stats {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 8px; margin-bottom: 20px;
+  }
+  .ocr-stat {
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: var(--rsm); padding: 12px 10px; text-align: center;
+  }
+  .ocr-stat-num { font-size: 24px; font-weight: 800; color: #3b82f6; line-height: 1; }
+  .ocr-stat-lbl { font-size: 10px; color: var(--text-dim); margin-top: 3px; }
+
+  .word-list {
+    max-height: 200px; overflow-y: auto;
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: var(--rsm); padding: 10px;
+    display: flex; flex-wrap: wrap; gap: 5px;
+  }
+  .word-tag {
+    background: rgba(59,130,246,.12); border: 1px solid rgba(59,130,246,.25);
+    color: #93c5fd; font-size: 11px; padding: 2px 8px;
+    border-radius: 99px; font-weight: 500;
+  }
+  .word-list-empty {
+    font-size: 12px; color: var(--text-dim);
+    text-align: center; padding: 12px; width: 100%;
+  }
+
+  .conf-slider { width: 100%; accent-color: #3b82f6; margin: 6px 0 16px; }
+</style>
+</head>
+<body>
+
+<nav class="dp-nav">
+  <a href="/" class="dp-back">← Back</a>
+  <div class="dp-nav-title">
+    🔤 <span>Text Detection</span>
+    <span class="dp-nav-badge">OCR · Tesseract</span>
+  </div>
+  <span class="dp-spacer"></span>
+  <div class="dp-status">
+    <span class="dp-dot" id="status-dot"></span>
+    <span id="status-txt">Upload an image</span>
+  </div>
+</nav>
+
+<div class="dp-layout">
+
+  <!-- Sidebar -->
+  <aside class="dp-sidebar">
+
+    <div class="dp-sidebar-title">Upload Image</div>
+
+    <div class="upload-zone" id="upload-zone"
+         onclick="document.getElementById('file-input').click()"
+         ondragover="onDragOver(event)"
+         ondragleave="onDragLeave(event)"
+         ondrop="onDrop(event)">
+      <div class="uz-icon">📂</div>
+      <div>Click or drag an image here</div>
+      <div style="font-size:11px;margin-top:3px">PNG, JPG, BMP, TIFF</div>
+      <div class="upload-filename" id="upload-name"></div>
+    </div>
+    <input type="file" id="file-input" accept="image/*" onchange="onFileChosen(event)"/>
+
+    <div style="margin-top: 20px;">
+      <div class="ctrl-label">OCR Results</div>
+      <div class="ocr-stats">
+        <div class="ocr-stat">
+          <div class="ocr-stat-num" id="stat-words">—</div>
+          <div class="ocr-stat-lbl">Words</div>
+        </div>
+        <div class="ocr-stat">
+          <div class="ocr-stat-num" id="stat-conf">—</div>
+          <div class="ocr-stat-lbl">Avg Conf.</div>
+        </div>
+      </div>
+
+      <div class="ctrl-label" style="margin-top:0">Detected Words</div>
+      <div class="word-list" id="word-list">
+        <span class="word-list-empty">No image uploaded yet</span>
+      </div>
+    </div>
+
+    <div style="margin-top: 20px;">
+      <div class="ctrl-label">About</div>
+      <div class="info-box" id="tess-info">
+        Uses <strong>Tesseract OCR</strong> to recognise text in uploaded images.
+        Each word is highlighted with a green box, and confidence scores filter
+        out noise detections.
+      </div>
+    </div>
+  </aside>
+
+  <!-- Stream -->
+  <section class="dp-main">
+    <div class="dp-toolbar">
+      <span class="dp-toolbar-title">Mode: <span>Text Detection</span></span>
+      <button class="snap-btn" onclick="takeSnapshot()">📷 Save Result</button>
+    </div>
+
+    <div class="dp-canvas">
+      <img id="feed" src="/stream/text" alt="Text Detection"/>
+    </div>
+
+    <div class="dp-infobar">
+      <div class="dp-chip" id="chip-tess">
+        <span class="dp-chip-dot"></span> Tesseract
+      </div>
+      <div class="dp-chip" id="chip-img">
+        <span class="dp-chip-dot"></span> Image loaded
+      </div>
+      <div class="dp-chip ok">
+        <span class="dp-chip-dot"></span> OCR Engine
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<div id="toast"></div>
+<canvas id="snap-canvas"></canvas>
+
+<script>
+// ── Init ───────────────────────────────────────────────────────────────────
+async function init() {
+  const r = await fetch('/api/status');
+  const d = await r.json();
+  const tessChip = document.getElementById('chip-tess');
+  if (d.tesseract) {
+    tessChip.classList.add('ok');
+  } else {
+    tessChip.classList.add('bad');
+    document.getElementById('tess-info').innerHTML =
+      '<strong style="color:#f87171">Tesseract not found.</strong> Install it and restart the server to enable OCR. ' +
+      'See README for instructions.';
+    toast('⚠ Tesseract not installed — OCR disabled', true);
+  }
+}
+
+// ── Drag & drop ────────────────────────────────────────────────────────────
+function onDragOver(e)  { e.preventDefault(); document.getElementById('upload-zone').classList.add('drag-over'); }
+function onDragLeave(e) { document.getElementById('upload-zone').classList.remove('drag-over'); }
+function onDrop(e) {
+  e.preventDefault();
+  document.getElementById('upload-zone').classList.remove('drag-over');
+  const file = e.dataTransfer.files[0];
+  if (file) uploadFile(file);
+}
+function onFileChosen(e) { if (e.target.files[0]) uploadFile(e.target.files[0]); }
+
+async function uploadFile(file) {
+  document.getElementById('upload-name').textContent = `⏳ ${file.name}`;
+  document.getElementById('status-dot').className = 'dp-dot warn';
+  document.getElementById('status-txt').textContent = 'Running OCR…';
+
+  const fd = new FormData();
+  fd.append('file', file);
+  const res = await fetch('/api/upload', { method:'POST', body:fd });
+
+  if (res.ok) {
+    document.getElementById('upload-name').textContent = `✓ ${file.name}`;
+    document.getElementById('chip-img').classList.add('ok');
+    document.getElementById('status-dot').className = 'dp-dot live';
+    document.getElementById('status-txt').textContent = 'OCR complete';
+    // Refresh stream
+    const feed = document.getElementById('feed');
+    feed.style.opacity = '0.5';
+    feed.src = '/stream/text?' + Date.now();
+    feed.onload = () => { feed.style.opacity = '1'; };
+    // Poll OCR result
+    setTimeout(fetchOCRResult, 1500);
+    toast('Image uploaded — OCR running…');
+  } else {
+    document.getElementById('upload-name').textContent = '✗ Upload failed';
+    toast('Upload failed', true);
+  }
+}
+
+async function fetchOCRResult() {
+  try {
+    const r = await fetch('/api/ocr_result');
+    const d = await r.json();
+    if (d.words) {
+      document.getElementById('stat-words').textContent = d.words.length;
+      document.getElementById('stat-conf').textContent =
+        d.avg_conf ? Math.round(d.avg_conf) + '%' : '—';
+
+      const list = document.getElementById('word-list');
+      if (d.words.length === 0) {
+        list.innerHTML = '<span class="word-list-empty">No text found in image</span>';
+      } else {
+        list.innerHTML = d.words
+          .map(w => `<span class="word-tag">${escHtml(w)}</span>`)
+          .join('');
+      }
+    }
+  } catch(_) {}
+}
+
+function escHtml(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+// ── Snapshot ───────────────────────────────────────────────────────────────
+function takeSnapshot() {
+  const img = document.getElementById('feed');
+  const c   = document.getElementById('snap-canvas');
+  c.width  = img.naturalWidth  || img.clientWidth;
+  c.height = img.naturalHeight || img.clientHeight;
+  c.getContext('2d').drawImage(img, 0, 0);
+  const a = document.createElement('a');
+  a.download = `ocr_result_${Date.now()}.jpg`;
+  a.href = c.toDataURL('image/jpeg', .93);
+  a.click();
+  toast('Result saved ✓');
+}
+
+let toastT;
+function toast(msg, isErr=false) {
+  const el = document.getElementById('toast');
+  el.textContent = (isErr ? '⚠ ' : '✓ ') + msg;
+  el.style.borderColor = isErr ? '#f87171' : 'var(--border)';
+  el.classList.add('show');
+  clearTimeout(toastT);
+  toastT = setTimeout(() => el.classList.remove('show'), 3000);
+}
+
+init();
+</script>
+</body>
+</html>
