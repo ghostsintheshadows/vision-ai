@@ -1,4 +1,3 @@
-[Uploading README.md…]()
 # Vision AI
 
 Real-time Color Detection, Face Detection, and OCR Text Detection — powered by OpenCV and Python. Runs entirely on your own machine, using your own webcam. No cloud, no API key.
