@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="description" content="Vision AI — Real-time Color Detection, Face Detection, and OCR Text Detection powered by OpenCV and Python."/>
+<meta property="og:title" content="Vision AI — Computer Vision in Your Browser"/>
+<meta property="og:description" content="Real-time color tracking, face detection, and OCR. Open source Python project."/>
+<title>Vision AI</title>
+<link rel="icon" type="image/x-icon" href="data:image/x-icon;base64,AAABAAEAQDcAAAEAIADgOAAAFgAAACgAAABAAAAAbgAAAAEAIAAAAAAAADcAAJwQAACcEAAAAAAAAAAAAAD///87////Y////2j///9o////aP///2j///9o////aP///2j///9o////af///1v///8YAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP///wn///9N////aP///2j///9o////aP///2j///9o////aP///2j///9o////Zv///0f///8N////3P/////////////////////////////////////////////////////////4////YAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD///8s////6P/////////////////////////////////////////////////////////o////QP/////////7////z////8P////D////w////8P////D////w////8P////D////qP///zYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA////Ff///5L////E////w////8P////D////w////8P////D////w////8X////z/////////1L/////////6////zb///8I////CP///wj///8I////CP///wj///8I////CP///wb///8BAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP///wD///8E////CP///wj///8I////CP///wj///8I////CP///wj///8R////yP////////9R/////////+r///8v////AP///wD///8A////AP///wD///8A////AP///wD///8A////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////Cf///8b/////////Uf/////////q////LwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP///wn////G/////////1H/////////6v///y8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD///8J////xv////////9R/////////+r///8vAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA////Cf///8b/////////Uf/////////q////LwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP///wn////G/////////1H/////////6v///y8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD///8J////xv////////9R/////////+r///8vAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA////Cf///8b/////////Uf/////////r////LwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA////AP///wD///8A////AP///wD///8A////B////xz///8m////NP///zn///9C////P////zX///8r////IP///wr///8A////AP///wD///8A////AP///wD///8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP///wn////H/////////1H////A////u////x4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD///8A////AP///wD///8J////Ff///zv///9v////l////7T////G////z////9r////f////5v///+T////c////1P///8r///+4////oP///3r///9R////HP///wz///8B////AP///wD///8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD///8G////mv///9f///87////Ff///xb///8CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP///wD///8A////Bv///yz///9d////of///9b////v/////P//////////////8f///+X////e////2f///9j////Z////2f///+L////r/////P//////////////9P///+P///+1////cf///zj///8U////AP///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA////AP///xP///8g////Bf///wD///8A////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD///8A////AP///wD///8L////RP///5H////X////+//////////2////2f///6////+I////Z////1H///89////NP///y7///8u////Lv///y3///85////SP///2L///99////nf///8X////v/////v/////////o////sP///2D///8V////AP///wD///8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP///wD///8A////AP///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD///8A////AP///xL///9U////tf///+j/////////8v///9H///+Q////R////yj///8T////AP///wD///8L////JP///0v///9s////c////2z///9S////Lf///xH///8A////AP///wv///8e////N////2////+z////6P/////////1////xv///3L///8b////AP///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP///wD///8A////Bv///0T///+3////9f/////////e////pP///1P///8U////Bf///wD///8A////AP///yP///9q////rf///+r////4/////P////3////9////+f////D////C////ef///yr///8A////AP///wD///8B////C////zj///+F////0f////7////8////y////2T///8X////AP///wD///8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP///wD///8A////JP///43////g/////////+T///+L////Of///wz///8A////AP///wD///8A////Bv///1X///+//////v////3////v////xf///6f///+a////oP///77////m/////P/////////P////d////xf///8A////AP///wD///8A////Av///yz///9z////z/////3////2////s////0X///8F////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP///wD///8K////Uv///9D/////////7v///6L///81////B////wD///8AAAAAAAAAAAD///8A////DP///3r////r/////////9L///94////Mv///xf///8O////Cv///wz///8V////JP///2r////F////+P////r///+k////Hv///wAAAAAAAAAAAP///wD///8A////Av///x////9+////2v/////////m////ff///xb///8A////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA////AP///wD///8W////gP///+/////8////yf///1b///8M////AP///wAAAAAAAAAAAAAAAAD///8A////Dv///4P////y////8f///5n///8n////Af///wD///8A////AP///wD///8A////AP///wD///8A////G////3H////f/////f///6n///8e////AAAAAAAAAAAAAAAAAP///wD///8A////Av///zH///+g////9f////z///+p////MP///wD///8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA////AP///wD///8n////rv////b////y////k////yv///8A////AAAAAAAAAAAAAAAAAAAAAAAAAAAA////A////2z////z////8////33///8M////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP///wD///8D////Vv///93////6////n////xT///8AAAAAAAAAAAAAAAAAAAAAAP///wD///8A////Ef///27////e/////////87///9I////Af///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA////AP///wD///8v////u//////////j////a////wr///8A////AAAAAAAAAAAAAAAAAAAAAAAAAAAA////AP///zb////c////9////4L///8L////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA////AP///wL///9T////4/////r///9f////AQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP///wD///8D////QP///8P////9////3P///1n///8I////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA////AP///wH///9G////yv/////////N////Sv///wX///8A////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP///wz///+e/////v///6z///8V////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD///8A////BP///3r////4////x////x4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA////AP///wD///8n////qP////z////n////cP///wr///8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA////AP///wH///9I////2v/////////J////OP///wD///8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP///wD///86////3////+v///9I////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP///wD///8o////zf////j///9l////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA////AP///xn///+a/////P////H///9y////BP///wAAAAAAAAAAAAAAAAAAAAAA////AP///wD///86////0f////////++////Lv///wD///8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD///8C////cP////////+8////CQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA////A////4f////+////o////wgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP///wD///8A////E////5n////5////6////1f///8C////AAAAAAAAAAAAAAAAAP///wD///8p////wf/////////B////Lv///wD///8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA////Cv///5r////+////ff///wEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP///wD///9Q////7////8v///8mAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA////AP///wD///8V////mf////z////d////Tf///wD///8AAAAAAAAAAAD///8U////rf/////////M////NP///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP///xX///+8////+v///1X///8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA////Kv///9z////i////PAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA////AP///xj///+j/////f///9b///8u////AAAAAAAAAAAA////ZP////b////y////W////wD///8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD///8Z////yv////f///8/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP///x3////W////7f///0cAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD///8A////JP///9D////+////lf///wIAAAAAAAAAAP///0z////m////+f///3f///8E////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA////Gv///87////5////Sf///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD///8c////1f///+j///9CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD///8A////AP///0P////m////+P///3b///8BAAAAAAAAAAD///8F////ef////j////o////Xv///wX///8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP///xP///+1////+////2L///8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA////Nf///+L////a////NAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD///8A////AP///zn////M/////////6b///8T////AAAAAAAAAAAA////AP///xT///+V////+f///+X///9d////BP///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD///8H////j/////////+R////AQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA////AP///1z////1////wP///xwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD///8A////AP///zj////J/////////7v///8p////AAAAAAAAAAAAAAAAAAAAAAD///8A////F////53////9////5v///2D///8E////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA////AP///1f////3////0P///x3///8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP///wX///+V/////f///5L///8DAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD///8A////AP///zj////M/////////8b///8v////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP///wD///8X////nv////z////n////Yv///wj///8A////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP///wD///8l////yv////f///9z////Af///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP///wD///85////3P////D///9L////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD///8A////AP///zv////L/////////8X///8y////AP///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA////AP///xr///+a////+f///+r///+C////Fv///wD///8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA////Av///3b////5////zP///yr///8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP///wD///8P////pv////////+5////EgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD///8A////Bf///1j////S/////////77///80////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD///8A////Ev///4r////z////+////6X///8p////AP///wAAAAAAAAAAAAAAAAAAAAAAAAAAAP///wD///8b////wv////////+r////H////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP///wD///8N////f/////f////l////Qv///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD///8A////GP///3n////r/////////7f///8n////AP///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA////AP///wD///8L////b////+L/////////yv///1j///8J////AP///wAAAAAAAAAAAAAAAAAAAAAA////Af///0f////X/////f///6n///8m////AP///wD///8A////AAAAAAAAAAAAAAAAAAAAAAD///8A////AP///wD///8P////f/////D////s////cP///wn///8AAAAAAAAAAAAAAAAA////AP///wD///8A////NP///6n////5////8f///5L///8k////AP///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA////AP///wT///9I////xf/////////u////lv///y7///8C////AP///wAAAAAAAAAAAP///wD///8D////T////9n////+////x////1r///8T////AP///wD///8A////AP///wD///8A////AP///w////8/////sf////X////w////d////wn///8AAAAAAAAAAAAAAAAA////AP///wD///8Y////Z////9T////+////2v///23///8L////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD///8A////AP///yP///+U////6//////////Z////dv///yb///8A////AP///wD///8A////AP///wH///9E////w/////3////2////tv///27///9H////Mv///y7///8w////QP///2L///+q////6v/////////d////a////wj///8A////AP///wD///8A////AP///w7///9Y////vP////v////4////r////z3///8C////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP///wD///8A////DP///0////+7////+/////3////J////d////yD///8F////AP///wD///8A////AP///yX///+G////4P////3/////////7f///9j////V////1////+b//////////v///+j///+e////Of///wX///8A////AP///wD///8C////GP///1v///+o////7P/////////U////cf///xn///8A////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP///wD///8A////Gv///3D////K////+/////z////f////l////0r///8e////BP///wD///8A////Bf///yz///96////sv///9P////g////4f///+D////X////u////4L///82////C////wD///8A////AP///xf///81////d////8r////0/////////+P///+O////J////wP///8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA////AP///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA////AP///wD///8A////H////3H///++////8//////////3////w////4////9l////Pv///xn///8C////Af///wP///8d////NP///zT///8y////Iv///wf///8B////AP///wr///8s////Vf///3v///+2////6v//////////////0P///4j///89////BP///wD///8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP///wD///8AAAAAAP///wD///8A////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP///wD///8A////HP///0z///+b////2v////b/////////+////+P////L////sv///5X///+A////bP///2P///9X////Wv///2n///91////iv///6X////B////1/////P/////////+////+n///+u////Zf///yn///8F////AP///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP///wD///8A////AP///wD///9K////Rv///wkAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA////AP///wD///8A////CP///x7///9a////lv///7/////Z////9P////////////////////z////6////+P////n////7/////f//////////////+f///+P////H////pf///2z///8s////C////wD///8A////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD///8C////N////03///8P////7////9r///8nAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA////AP///wD///8A////AP///wH///8W////M////1P///9t////gf///5j///+k////rv///7P///+0////qv///5r///+K////c////1n///8+////Hf///wD///8A////AP///wD///8A////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA////CP///7f////u////Q//////////r////LwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD///8A////AP///wD///8A////AP///wH///8K////Dv///xL///8U////FP///xH///8K////BP///wD///8A////AP///wD///8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP///wn////H/////////1L/////////6v///y8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD///8J////xv////////9R/////////+r///8vAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA////Cf///8b/////////Uf/////////q////LwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP///wn////G/////////1H/////////6v///y8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD///8J////xv////////9R/////////+r///8vAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA////Cf///8b/////////Uf/////////q////LwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP///wn////G/////////1H/////////6v///yz///8A////AP///wD///8A////AP///wD///8A////AP///wD///8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8G////xf////////9R/////////+7///9U////Lf///y3///8t////Lf///y3///8t////Lf///y3///8o////CwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD///8D////IP///y3///8t////Lf///y3///8t////Lf///y3///8t////NP///9H/////////Uf/////////+////7v///+n////p////6f///+n////p////6f///+n////q////3v///1MAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA////JP///8j////q////6f///+n////p////6f///+n////p////6f///+r////7/////////1H////M/////////////////////////////////////////////////////////+n///9NAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP///yX////e/////////////////////////////////////////////////////////9f///8zAAf/////wAAAB//////AAAAH/////8AAAAf/////4AAf////////8B/////////wH/////////Af////////8B/////////wH/////////Af////////8B///8AH///wH//4AAAf//Af/8AAAAf/+P//AAAAAf////wAYAwAf///8AOAA4Af///gHgAA8Af//4B8AAB8A///AfgP8D8B//4H8D/4H8B//A/wf/wP4D/wH+D//g/4H+B/4f//D/wP4P/B//8H/gfB/8H//4f/B4P/w///h/+Dh//D//+H/8GD/8P//4f/wYH/w///h/+DwP/B//+H/wfgf+H//wf+D/A/4P//D/wf+B/g//4P8D/8D/B//B/gf/4D8D/4H8D//wD4D+A/Af//wHwAAHwD///gDwAA4A////gBgAOAH////gAACAB/////gAAAAf//H//gAAAP//Af//wAAP//8B///+AP///wH/////////Af////////8B/////////wH/////////Af////////8B/////////wH/////////AAB//////AAAAH/////8AAAAf/////wAA="/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0c0c0f;
+  --surface:#111116;
+  --surface2:#17171e;
+  --border:rgba(255,255,255,.07);
+  --border2:rgba(255,255,255,.13);
+  --text:#f0f0f5;
+  --text2:#8e8ea8;
+  --text3:#55556a;
+  --accent:#7c6af7;
+  --accent2:#a78bfa;
+  --green:#34d399;
+  --orange:#fb923c;
+  --blue:#60a5fa;
+  --r:16px;
+  --rsm:10px;
+}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+
+/* Grain */
+body::before{
+  content:'';
+  position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");
+  opacity:.55;
+}
+
+/* ── Nav */
+nav{
+  position:sticky;top:0;z-index:100;
+  display:flex;align-items:center;gap:12px;
+  padding:0 max(24px,calc(50vw - 600px));
+  height:62px;
+  background:rgba(12,12,15,.85);
+  backdrop-filter:blur(18px);
+  border-bottom:1px solid var(--border);
+}
+.nav-logo{display:flex;align-items:center;gap:9px;text-decoration:none;color:var(--text);font-weight:700;font-size:16px;letter-spacing:-.02em}
+.logo-mark{width:30px;height:30px;background:linear-gradient(135deg,#7c6af7,#c084fc);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.nav-sp{flex:1}
+.nav-links{display:flex;align-items:center;gap:4px;list-style:none}
+.nav-links a{color:var(--text2);text-decoration:none;font-size:13.5px;font-weight:500;padding:6px 12px;border-radius:var(--rsm);transition:color .15s,background .15s}
+.nav-links a:hover{color:var(--text);background:rgba(255,255,255,.05)}
+.gh-btn{
+  display:flex;align-items:center;gap:7px;
+  background:rgba(255,255,255,.06);border:1px solid var(--border2);
+  border-radius:var(--rsm);padding:8px 15px;
+  color:var(--text);font-size:13px;font-weight:600;
+  text-decoration:none;transition:background .15s,border-color .15s;
+}
+.gh-btn:hover{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.22)}
+.gh-btn svg{width:16px;height:16px;fill:currentColor;flex-shrink:0}
+
+/* ── Hero */
+.hero{
+  position:relative;
+  padding:96px max(24px,calc(50vw - 600px)) 72px;
+  text-align:center;overflow:hidden;
+}
+.hero-glow{
+  position:absolute;top:-100px;left:50%;transform:translateX(-50%);
+  width:900px;height:500px;
+  background:radial-gradient(ellipse at center,rgba(124,106,247,.16) 0%,transparent 65%);
+  pointer-events:none;
+}
+.badge{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(124,106,247,.1);border:1px solid rgba(124,106,247,.25);
+  border-radius:99px;padding:5px 16px 5px 10px;
+  font-size:12px;font-weight:600;color:var(--accent2);
+  margin-bottom:30px;position:relative;z-index:1;
+}
+.badge-dot{
+  width:7px;height:7px;border-radius:50%;
+  background:var(--green);box-shadow:0 0 8px var(--green);
+  animation:pulse 2.2s ease infinite;
+}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.55;transform:scale(.75)}}
+.hero h1{
+  font-size:clamp(40px,6.5vw,80px);font-weight:900;
+  letter-spacing:-.04em;line-height:1.05;
+  color:var(--text);margin-bottom:22px;
+  position:relative;z-index:1;
+}
+.hero h1 .gr{
+  background:linear-gradient(130deg,#fff 20%,#a78bfa 60%,#7c6af7 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.hero-sub{
+  font-size:18px;color:var(--text2);max-width:540px;
+  margin:0 auto 44px;line-height:1.72;
+  position:relative;z-index:1;
+}
+.ctas{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;position:relative;z-index:1}
+.btn-p{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--accent);color:#fff;border:none;border-radius:var(--rsm);
+  padding:13px 26px;font-size:15px;font-weight:700;text-decoration:none;cursor:pointer;
+  transition:opacity .15s,transform .15s,box-shadow .15s;
+}
+.btn-p:hover{opacity:.88;transform:translateY(-2px);box-shadow:0 8px 30px rgba(124,106,247,.38)}
+.btn-o{
+  display:inline-flex;align-items:center;gap:8px;
+  background:transparent;color:var(--text2);border:1px solid var(--border2);
+  border-radius:var(--rsm);padding:13px 26px;font-size:15px;font-weight:600;
+  text-decoration:none;cursor:pointer;transition:all .15s;
+}
+.btn-o:hover{border-color:rgba(255,255,255,.3);color:var(--text)}
+.btn-p svg,.btn-o svg{width:17px;height:17px;fill:currentColor;flex-shrink:0}
+
+/* ── Stats bar */
+.stats{
+  margin:56px max(24px,calc(50vw - 600px)) 0;
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r);overflow:hidden;
+}
+.stats-inner{display:grid;grid-template-columns:repeat(4,1fr)}
+.stat{
+  padding:28px 26px;border-right:1px solid var(--border);
+}
+.stat:last-child{border-right:none}
+.stat-n{font-size:30px;font-weight:900;letter-spacing:-.04em;line-height:1}
+.stat-l{font-size:12px;color:var(--text2);margin-top:6px;font-weight:500}
+.stat-d{font-size:12px;color:var(--text3);margin-top:3px}
+
+/* ── Section */
+.sec{padding:96px max(24px,calc(50vw - 600px))}
+.eyebrow{
+  display:flex;align-items:center;gap:10px;
+  font-size:11px;font-weight:700;letter-spacing:1.4px;
+  text-transform:uppercase;color:var(--text3);margin-bottom:16px;
+}
+.eyebrow::before{content:'';display:block;width:22px;height:1px;background:var(--text3)}
+.sec h2{font-size:clamp(28px,4vw,48px);font-weight:900;letter-spacing:-.04em;margin-bottom:14px}
+.sec-lead{font-size:16px;color:var(--text2);max-width:500px;line-height:1.72;margin-bottom:52px}
+
+/* ── Feature cards */
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r);overflow:hidden;
+  display:flex;flex-direction:column;
+  transition:transform .22s,border-color .22s,box-shadow .22s;
+  position:relative;
+}
+.card:hover{
+  transform:translateY(-6px);
+  border-color:var(--border2);
+  box-shadow:0 24px 64px rgba(0,0,0,.55);
+}
+.card-img{position:relative;overflow:hidden;aspect-ratio:1/1}
+.card-img img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s}
+.card:hover .card-img img{transform:scale(1.05)}
+.card-img-fade{
+  position:absolute;inset:0;
+  background:linear-gradient(to top,rgba(17,17,22,.95) 0%,transparent 55%);
+}
+.card-body{padding:22px;flex:1;display:flex;flex-direction:column}
+.card-tag{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;
+  padding:3px 10px;border-radius:99px;margin-bottom:12px;width:fit-content;
+}
+.card h3{font-size:21px;font-weight:800;letter-spacing:-.02em;color:var(--text);margin-bottom:10px}
+.card p{font-size:13.5px;color:var(--text2);line-height:1.65;flex:1;margin-bottom:18px}
+.features{display:flex;flex-direction:column;gap:7px;margin-bottom:22px}
+.feature{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--text2)}
+.feature-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0}
+.card-link{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:12px 16px;
+  background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:var(--rsm);
+  color:var(--text);text-decoration:none;font-size:13.5px;font-weight:600;
+  transition:all .15s;
+}
+.card-link:hover{background:rgba(255,255,255,.08);border-color:var(--border2)}
+.arrow{font-size:16px;transition:transform .15s}
+.card:hover .arrow{transform:translateX(4px)}
+
+/* ── How it works */
+.how{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.how-inner{padding:72px max(24px,calc(50vw - 600px))}
+.how-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0}
+.how-step{padding:36px 28px;border-right:1px solid var(--border);position:relative}
+.how-step:last-child{border-right:none}
+.step-num{font-size:11px;font-weight:700;letter-spacing:1px;color:var(--text3);margin-bottom:14px;font-family:monospace}
+.step-ico{font-size:28px;margin-bottom:14px;display:block}
+.how-step h3{font-size:17px;font-weight:700;margin-bottom:8px;letter-spacing:-.01em}
+.how-step p{font-size:13px;color:var(--text2);line-height:1.65}
+
+/* ── Setup */
+.setup-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start}
+.setup-steps{display:flex;flex-direction:column;gap:0;margin-top:32px}
+.setup-step{display:flex;gap:16px;padding:18px 0;border-bottom:1px solid var(--border)}
+.setup-step:last-child{border-bottom:none;padding-bottom:0}
+.step-circle{
+  width:28px;height:28px;border-radius:50%;flex-shrink:0;margin-top:2px;
+  background:rgba(124,106,247,.12);border:1px solid rgba(124,106,247,.25);
+  color:var(--accent2);font-size:12px;font-weight:800;
+  display:flex;align-items:center;justify-content:center;
+}
+.setup-step h4{font-size:14px;font-weight:700;margin-bottom:4px}
+.setup-step p{font-size:13px;color:var(--text2);line-height:1.6}
+code{font-family:monospace;font-size:12px;background:rgba(255,255,255,.07);padding:1px 6px;border-radius:4px}
+
+/* Code block */
+.code-box{background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);overflow:hidden}
+.code-head{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:12px 18px;border-bottom:1px solid var(--border);background:rgba(255,255,255,.02);
+}
+.dots{display:flex;gap:6px}
+.dot{width:10px;height:10px;border-radius:50%}
+.lang{font-size:11px;color:var(--text3);font-weight:600;letter-spacing:.5px;font-family:monospace}
+.code-body{padding:22px 22px;font-family:'Fira Code','Cascadia Code','Consolas',monospace;font-size:12.5px;line-height:1.9;color:var(--text2)}
+.cm{color:var(--text3)}
+.ck{color:#93c5fd}
+.cs{color:#86efac}
+.cc{color:var(--accent2)}
+.cn{color:#f9a8d4}
+
+/* ── Tech */
+.tech-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.tech-card{
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--r);
+  padding:24px 20px;transition:border-color .2s,transform .2s;
+}
+.tech-card:hover{border-color:var(--border2);transform:translateY(-2px)}
+.tech-ico{font-size:30px;margin-bottom:12px;display:block}
+.tech-name{font-size:15px;font-weight:700;margin-bottom:5px;letter-spacing:-.01em}
+.tech-desc{font-size:12.5px;color:var(--text2);line-height:1.55}
+.tech-ver{
+  display:inline-block;margin-top:10px;font-size:10px;font-weight:700;
+  letter-spacing:.8px;font-family:monospace;
+  background:rgba(255,255,255,.05);border:1px solid var(--border);
+  border-radius:99px;padding:2px 9px;color:var(--text3);
+}
+
+/* ── Deploy */
+.deploy-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.deploy-card{
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--r);
+  padding:28px;transition:border-color .2s;
+}
+.deploy-card:hover{border-color:var(--border2)}
+.deploy-card h3{font-size:18px;font-weight:700;margin-bottom:8px;letter-spacing:-.01em}
+.deploy-card>p{font-size:13.5px;color:var(--text2);line-height:1.65;margin-bottom:20px}
+.dpill{
+  display:inline-flex;align-items:center;
+  font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;
+  padding:3px 10px;border-radius:99px;margin-bottom:16px;
+}
+.dpill.free{background:rgba(52,211,153,.1);color:var(--green);border:1px solid rgba(52,211,153,.2)}
+.dpill.self{background:rgba(96,165,250,.1);color:var(--blue);border:1px solid rgba(96,165,250,.2)}
+
+/* ── CTA */
+.cta-band{
+  margin:0 max(24px,calc(50vw - 600px)) 80px;
+  background:linear-gradient(135deg,rgba(124,106,247,.14),rgba(167,139,250,.07));
+  border:1px solid rgba(124,106,247,.22);
+  border-radius:var(--r);padding:64px 48px;
+  text-align:center;position:relative;overflow:hidden;
+}
+.cta-band::before{
+  content:'';position:absolute;top:-80px;left:50%;transform:translateX(-50%);
+  width:500px;height:300px;
+  background:radial-gradient(ellipse,rgba(124,106,247,.22),transparent 70%);
+  pointer-events:none;
+}
+.cta-band h2{font-size:clamp(26px,4vw,42px);font-weight:900;letter-spacing:-.03em;margin-bottom:14px;position:relative}
+.cta-band p{font-size:16px;color:var(--text2);margin-bottom:34px;position:relative}
+
+/* ── Footer */
+footer{
+  border-top:1px solid var(--border);
+  padding:32px max(24px,calc(50vw - 600px));
+  display:flex;align-items:center;gap:20px;flex-wrap:wrap;
+}
+.foot-logo{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:700;color:var(--text);text-decoration:none}
+.foot-logo-mark{width:24px;height:24px;background:linear-gradient(135deg,#7c6af7,#c084fc);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:11px}
+.foot-meta{font-size:12.5px;color:var(--text3)}
+.foot-sp{flex:1}
+.foot-links{display:flex;gap:20px;list-style:none}
+.foot-links a{font-size:13px;color:var(--text3);text-decoration:none;transition:color .15s}
+.foot-links a:hover{color:var(--text)}
+
+/* ── Responsive */
+@media(max-width:960px){
+  .cards{grid-template-columns:1fr}
+  .how-grid{grid-template-columns:1fr 1fr}
+  .how-step{border-bottom:1px solid var(--border)}
+  .setup-grid{grid-template-columns:1fr}
+  .tech-grid{grid-template-columns:1fr 1fr}
+  .deploy-grid{grid-template-columns:1fr}
+  .stats-inner{grid-template-columns:1fr 1fr}
+  .stat:nth-child(2){border-right:none}
+  .stat:nth-child(3){border-top:1px solid var(--border);border-right:1px solid var(--border)}
+  .stat:last-child{border-top:1px solid var(--border)}
+  nav .nav-links{display:none}
+}
+@media(max-width:600px){
+  .how-grid{grid-template-columns:1fr}
+  .tech-grid{grid-template-columns:1fr}
+  .stats-inner{grid-template-columns:1fr}
+  .stat{border-right:none!important;border-bottom:1px solid var(--border)}
+  .stat:last-child{border-bottom:none}
+  .cta-band{padding:40px 24px}
+  .sec{padding:64px 24px}
+}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<nav>
+  <a href="#" class="nav-logo"><div class="logo-mark">👁</div>Vision AI</a>
+  <span class="nav-sp"></span>
+  <ul class="nav-links">
+    <li><a href="#features">Features</a></li>
+    <li><a href="#how">How it works</a></li>
+    <li><a href="#setup">Setup</a></li>
+    <li><a href="#deploy">Deploy</a></li>
+  </ul>
+  <a href="https://github.com/your-username/vision-ai" target="_blank" rel="noopener" class="gh-btn">
+    <svg viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.37.6.1.82-.26.82-.58v-2.03c-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.75.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49 1 .1-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 013.01-.4c1.02 0 2.05.14 3.01.4 2.29-1.55 3.3-1.23 3.3-1.23.66 1.66.25 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.21.69.82.57C20.56 21.79 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg> Star on GitHub
+  </a>
+</nav>
+<section class="hero">
+  <div class="hero-glow"></div>
+  <div class="badge"><span class="badge-dot"></span>Open Source &middot; Real-Time &middot; Zero Cloud</div>
+  <h1>Computer Vision<br/><span class="gr">in Your Browser</span></h1>
+  <p class="hero-sub">
+    Color tracking, face detection, and OCR text recognition &mdash;
+    running live from your webcam. No cloud, no API key, just Python.
+  </p>
+  <div class="ctas">
+    <a href="https://github.com/your-username/vision-ai" target="_blank" rel="noopener" class="btn-p">
+      <svg viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.37.6.1.82-.26.82-.58v-2.03c-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.75.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49 1 .1-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 013.01-.4c1.02 0 2.05.14 3.01.4 2.29-1.55 3.3-1.23 3.3-1.23.66 1.66.25 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.21.69.82.57C20.56 21.79 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg> Clone on GitHub
+    </a>
+    <a href="#features" class="btn-o">Explore features &darr;</a>
+  </div>
+</section>
+<div class="stats">
+  <div class="stats-inner">
+    <div class="stat"><div class="stat-n">3</div><div class="stat-l">Detection Modes</div><div class="stat-d">Color · Face · OCR</div></div>
+    <div class="stat"><div class="stat-n">~30fps</div><div class="stat-l">Live Stream</div><div class="stat-d">MJPEG via Flask</div></div>
+    <div class="stat"><div class="stat-n">8</div><div class="stat-l">Trackable Colours</div><div class="stat-d">Switchable in sidebar</div></div>
+    <div class="stat"><div class="stat-n">5</div><div class="stat-l">pip packages</div><div class="stat-d">All open source</div></div>
+  </div>
+</div>
+<section class="sec" id="features">
+  <div class="eyebrow">Detection modes</div>
+  <h2>Three ways to see</h2>
+  <p class="sec-lead">Every mode runs in its own dedicated page with live sidebar controls, annotated MJPEG stream, and one-click snapshots.</p>
+  <div class="cards">
+
+    <div class="card">
+      <div class="card-img">
+        <img src="Color_cover.png">
+        <div class="card-img-fade"></div>
+      </div>
+      <div class="card-body">
+        <span class="card-tag" style="background:rgba(52,211,153,.1);color:#34d399;border:1px solid rgba(52,211,153,.2)">&#127912; Color Detection</span>
+        <h3>Track any colour, live</h3>
+        <p>Pick a colour from 8 sidebar swatches. The webcam feed is converted to HSV space and a bounding box wraps the largest matching region in real-time.</p>
+        <div class="features">
+          <div class="feature"><span class="feature-dot" style="background:#34d399"></span>8 selectable colours</div>
+          <div class="feature"><span class="feature-dot" style="background:#34d399"></span>Morphological noise cleanup</div>
+          <div class="feature"><span class="feature-dot" style="background:#34d399"></span>Pixel-size readout on bbox</div>
+        </div>
+        <a href="https://github.com/your-username/vision-ai" class="card-link">Color Detection page <span class="arrow">&#8594;</span></a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-img">
+        <img src="Image_cover.png">
+        <div class="card-img-fade"></div>
+      </div>
+      <div class="card-body">
+        <span class="card-tag" style="background:rgba(96,165,250,.1);color:#60a5fa;border:1px solid rgba(96,165,250,.2)">&#128292; Text / OCR</span>
+        <h3>Read text from any image</h3>
+        <p>Drag and drop a PNG or JPG and Tesseract OCR highlights every detected word. A word list and average confidence score appear live in the sidebar.</p>
+        <div class="features">
+          <div class="feature"><span class="feature-dot" style="background:#60a5fa"></span>Drag-and-drop upload</div>
+          <div class="feature"><span class="feature-dot" style="background:#60a5fa"></span>Confidence-filtered words</div>
+          <div class="feature"><span class="feature-dot" style="background:#60a5fa"></span>Live word list in sidebar</div>
+        </div>
+        <a href="https://github.com/your-username/vision-ai" class="card-link">Text Detection page <span class="arrow">&#8594;</span></a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-img">
+        <img src="Face_cover.png">
+        <div class="card-img-fade"></div>
+      </div>
+      <div class="card-body">
+        <span class="card-tag" style="background:rgba(251,146,60,.1);color:#fb923c;border:1px solid rgba(251,146,60,.2)">&#129489; Face Detection</span>
+        <h3>Find every face in frame</h3>
+        <p>Haar cascade detects faces in the live webcam feed. Two sliders let you tune scale factor and min neighbours on the fly. Face count shown live.</p>
+        <div class="features">
+          <div class="feature"><span class="feature-dot" style="background:#fb923c"></span>Live face counter</div>
+          <div class="feature"><span class="feature-dot" style="background:#fb923c"></span>Adjustable sensitivity sliders</div>
+          <div class="feature"><span class="feature-dot" style="background:#fb923c"></span>Corner-marker bounding boxes</div>
+        </div>
+        <a href="https://github.com/your-username/vision-ai" class="card-link">Face Detection page <span class="arrow">&#8594;</span></a>
+      </div>
+    </div>
+
+  </div>
+</section>
+<div class="how" id="how">
+  <div class="how-inner">
+    <div class="eyebrow">Architecture</div>
+    <h2>How it works</h2>
+    <p class="sec-lead" style="margin-bottom:40px">Flask serves the pages and streams annotated frames via MJPEG. All processing runs on your local machine.</p>
+    <div class="how-grid">
+      <div class="how-step">
+        <div class="step-num">01</div>
+        <span class="step-ico">&#127909;</span>
+        <h3>Camera capture</h3>
+        <p>OpenCV opens the default webcam and reads raw BGR frames at the device&#39;s native rate.</p>
+      </div>
+      <div class="how-step">
+        <div class="step-num">02</div>
+        <span class="step-ico">&#9881;&#65039;</span>
+        <h3>Frame processing</h3>
+        <p>Each frame is processed by the active mode &mdash; HSV masking, Haar cascade, or Tesseract OCR &mdash; with annotations drawn on top.</p>
+      </div>
+      <div class="how-step">
+        <div class="step-num">03</div>
+        <span class="step-ico">&#128225;</span>
+        <h3>MJPEG stream</h3>
+        <p>Annotated JPEG frames are pushed to the browser over a multipart HTTP response. No WebSocket or WebRTC required.</p>
+      </div>
+      <div class="how-step">
+        <div class="step-num">04</div>
+        <span class="step-ico">&#128187;</span>
+        <h3>Browser UI</h3>
+        <p>Single-page HTML renders the stream, sends control commands via a JSON API, and provides a snapshot button.</p>
+      </div>
+    </div>
+  </div>
+</div>
+<section class="sec" id="setup">
+  <div class="setup-grid">
+    <div>
+      <div class="eyebrow">Get started</div>
+      <h2>Running in minutes</h2>
+      <p class="sec-lead" style="margin-bottom:0">No Docker, no cloud account, no API key. Clone the repo and go.</p>
+      <div class="setup-steps">
+        <div class="setup-step">
+          <div class="step-circle">1</div>
+          <div>
+            <h4>Clone the repository</h4>
+            <p>Get the code from GitHub with <code>git clone</code> and <code>cd</code> into the folder.</p>
+          </div>
+        </div>
+        <div class="setup-step">
+          <div class="step-circle">2</div>
+          <div>
+            <h4>Install Python dependencies</h4>
+            <p>Five packages: <code>flask</code>, <code>opencv-python</code>, <code>pillow</code>, <code>pytesseract</code>, <code>numpy</code>.</p>
+          </div>
+        </div>
+        <div class="setup-step">
+          <div class="step-circle">3</div>
+          <div>
+            <h4>Install Tesseract OCR engine</h4>
+            <p>Only needed for text detection. Available via <code>brew</code>, <code>apt</code>, or the Windows installer linked in the README.</p>
+          </div>
+        </div>
+        <div class="setup-step">
+          <div class="step-circle">4</div>
+          <div>
+            <h4>Start and open</h4>
+            <p>Run <code>python app.py</code> and visit <code>localhost:5000</code> in your browser.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="code-box">
+      <div class="code-head">
+        <div class="dots">
+          <div class="dot" style="background:#ff5f57"></div>
+          <div class="dot" style="background:#febc2e"></div>
+          <div class="dot" style="background:#28c840"></div>
+        </div>
+        <span class="lang">TERMINAL</span>
+      </div>
+      <div class="code-body">
+<span class="cm"># 1. Clone</span>
+<span class="ck">git</span> <span class="cs">clone</span> <span class="cc">https://github.com/your-username/vision-ai</span>
+<span class="ck">cd</span> <span class="cc">vision-ai</span>
+
+<span class="cm"># 2. Python dependencies</span>
+<span class="ck">pip</span> <span class="cs">install</span> <span class="cc">flask opencv-python pillow pytesseract numpy</span>
+
+<span class="cm"># 3. Tesseract OCR engine</span>
+<span class="cm">#  macOS:</span>
+<span class="ck">brew</span> <span class="cs">install</span> <span class="cc">tesseract</span>
+<span class="cm">#  Ubuntu / Debian:</span>
+<span class="ck">sudo apt</span> <span class="cs">install</span> <span class="cc">tesseract-ocr</span>
+<span class="cm">#  Windows: see github.com/UB-Mannheim/tesseract</span>
+
+<span class="cm"># 4. Run</span>
+<span class="ck">python</span> <span class="cs">app.py</span>
+<span class="cm"># Open: http://localhost:5000</span>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="sec" style="padding-top:0">
+  <div class="eyebrow">Stack</div>
+  <h2>Built with</h2>
+  <p class="sec-lead">Standard Python libraries &mdash; nothing exotic, nothing proprietary.</p>
+  <div class="tech-grid">
+    <div class="tech-card"><span class="tech-ico">&#127822;</span><div class="tech-name">Flask</div><div class="tech-desc">Lightweight WSGI framework serving HTML pages, the MJPEG stream, and a JSON control API.</div><span class="tech-ver">v3.x</span></div>
+    <div class="tech-card"><span class="tech-ico">&#128247;</span><div class="tech-name">OpenCV</div><div class="tech-desc">Camera capture, HSV masking, Haar cascade detection, morphological ops, and JPEG encoding.</div><span class="tech-ver">v4.x</span></div>
+    <div class="tech-card"><span class="tech-ico">&#128292;</span><div class="tech-name">Tesseract</div><div class="tech-desc">Google&#39;s OCR engine via pytesseract. Detects words and confidence scores from uploaded images.</div><span class="tech-ver">v5.x</span></div>
+    <div class="tech-card"><span class="tech-ico">&#128444;&#65039;</span><div class="tech-name">Pillow</div><div class="tech-desc">Bounding-box extraction from binary colour masks in the real-time colour detection pipeline.</div><span class="tech-ver">v10.x</span></div>
+  </div>
+</section>
+<section class="sec" style="padding-top:0" id="deploy">
+  <div class="eyebrow">Sharing</div>
+  <h2>Share with others online</h2>
+  <p class="sec-lead">Two approaches to let people access your running instance from anywhere.</p>
+  <div class="deploy-grid">
+    <div class="deploy-card">
+      <div class="dpill free">Free &middot; Instant</div>
+      <h3>ngrok tunnel</h3>
+      <p>Expose your local server with a public HTTPS URL in one command. Perfect for demos and quick sharing.</p>
+      <div class="code-box">
+        <div class="code-head">
+          <div class="dots"><div class="dot" style="background:#ff5f57"></div><div class="dot" style="background:#febc2e"></div><div class="dot" style="background:#28c840"></div></div>
+          <span class="lang">TERMINAL</span>
+        </div>
+        <div class="code-body" style="padding:14px 18px">
+<span class="ck">python</span> <span class="cs">app.py</span> <span class="cm">&amp;</span>
+<span class="ck">ngrok</span> <span class="cs">http</span> <span class="cc">5000</span>
+<span class="cm"># Share the https://xxxx.ngrok.io URL</span>
+        </div>
+      </div>
+    </div>
+    <div class="deploy-card">
+      <div class="dpill self">VPS / Cloud</div>
+      <h3>Self-hosted server</h3>
+      <p>Deploy on any Linux VPS (DigitalOcean, Linode, EC2). Use Gunicorn with a single worker since the camera is a shared resource.</p>
+      <div class="code-box">
+        <div class="code-head">
+          <div class="dots"><div class="dot" style="background:#ff5f57"></div><div class="dot" style="background:#febc2e"></div><div class="dot" style="background:#28c840"></div></div>
+          <span class="lang">TERMINAL</span>
+        </div>
+        <div class="code-body" style="padding:14px 18px">
+<span class="ck">pip</span> <span class="cs">install</span> <span class="cc">gunicorn</span>
+<span class="ck">gunicorn</span> <span class="cn">-w 1</span> <span class="cs">-b</span> <span class="cc">0.0.0.0:5000</span> <span class="cn">app:app</span>
+<span class="cm"># -w 1 required: camera is shared state</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="cta-band">
+  <h2>Ready to build?</h2>
+  <p>Clone the repo, run three commands, and have a working computer vision app running locally in minutes.</p>
+  <div class="ctas">
+    <a href="https://github.com/your-username/vision-ai" target="_blank" rel="noopener" class="btn-p">
+      <svg viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.37.6.1.82-.26.82-.58v-2.03c-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.75.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49 1 .1-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 013.01-.4c1.02 0 2.05.14 3.01.4 2.29-1.55 3.3-1.23 3.3-1.23.66 1.66.25 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.21.69.82.57C20.56 21.79 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg> Star on GitHub
+    </a>
+    <a href="#setup" class="btn-o">Read the setup guide &#8593;</a>
+  </div>
+</div>
+<footer>
+  <a href="#" class="foot-logo"><div class="foot-logo-mark">&#128065;</div>Vision AI</a>
+  <span class="foot-meta">&copy; 2026 &middot; Educational project &middot; MIT License</span>
+  <span class="foot-sp"></span>
+  <ul class="foot-links">
+    <li><a href="#features">Features</a></li>
+    <li><a href="#how">How it works</a></li>
+    <li><a href="#setup">Setup</a></li>
+    <li><a href="https://github.com/your-username/vision-ai" target="_blank" rel="noopener">GitHub</a></li>
+  </ul>
+</footer>
+</body>
+</html>
